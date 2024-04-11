@@ -1,0 +1,48 @@
+<%- include('header.ejs') %>
+
+<body>
+    <div id="list-container">
+        <div id="pokemon-name-list">
+            <% for (var i=0; i<list.length; i++){ %>
+                <button id="pokemon-name-button" class="copy-button" onclick="copyText()"><%= list[i] %></button>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.copy-button').click(function() {
+                var button = $(this);
+                var originalText = button.text();
+                var textToCopy = originalText;
+
+                // Create a temporary textarea to copy the text
+                var textarea = $('<textarea></textarea>').val(textToCopy).appendTo('body');
+
+                // Select the text within the textarea
+                textarea.select();
+                textarea[0].setSelectionRange(0, 99999); // For mobile devices
+
+                // Copy the selected text
+                document.execCommand('copy');
+
+                // Remove the temporary textarea
+                textarea.remove();
+
+                // Change button text to "Copied" temporarily
+                button.text('Copied');
+
+                // After 2 second, revert back to original text
+                setTimeout(function() {
+                    button.text(originalText);
+                }, 2000);
+                
+                // Alert or provide feedback to the user
+                // alert('Text copied: ' + textToCopy);
+            });
+        });
+    </script>
+    
+</body>
+
+<%- include('footer.ejs') %>

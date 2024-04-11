@@ -1,0 +1,64 @@
+<%- include('header.ejs') %>
+
+    <div id="container">
+        <div id="searchBox">
+            <p>Please type in the name of the Pokémon you want and then click the submit <br> button to get your Pokémon card!</p> 
+            <p>Remember to check the <a href="/list" id="list-link">list of available Pokémon</a> for the correct spellings.</p>
+            <p>Here are some special examples:</p>
+            <p id="special-examples">MewTwo, Nidoran♂, Nidoran♀, Mr. Mime, Ho-oh</p>
+            <form action="/" method="post" id="nameEntryForm">
+                <input type="text" id="pokemonNameEntry" name="pokemonName" required>
+                <input type="submit" value="Submit" id="submitButton">
+            </form>
+        </div>
+        <% var reqData; %>
+        <% if (locals.pokemonData){ %>
+            <% reqData = {
+                gen: pokemonData.gen,
+                name: pokemonData.name,
+                hp: pokemonData.baseStats.hp,
+                imageLink: pokemonData.sprite,
+                height: pokemonData.height,
+                weight: pokemonData.weight,
+                abilities: pokemonData.abilities
+            } %>
+        <% }else{ %>
+            <% reqData = {
+                gen: 6,
+                name: "Greninja",
+                hp: 72,
+                imageLink: "https://img.pokemondb.net/sprites/home/normal/greninja-ash.png",
+                height: "1.5m",
+                weight: "40kg",
+                abilities: [
+                    {name: "Torrent", description: "Powers up Water-type moves in a pinch."},
+                    {name: "Protean", description: "Changes the Pokémon's type to its last used move."}
+                ]
+            } %> 
+        <% } %>
+        <div class="card">
+            <div class="basicInfo">
+                <div class="gen"><%= reqData.gen %></div>
+                <div class="name"><%= reqData.name %></div>
+                <div class="hp">hp <%= reqData.hp %></div>
+            </div>
+            <div class="imageContainer">
+                <img class="pokemonImage" src=<%= reqData.imageLink %> alt="">
+                <div class="bodyStats">
+                    <div class="height">Height: <%= reqData.height %></div>
+                    <div class="weight">Weight: <%= reqData.weight %></div>
+                </div>
+            </div>
+            <div class="abilities">
+                <div>
+                    <% for (var i=0; i<reqData.abilities.length; i++){ %>
+                        <p><b><%- reqData.abilities[i].name %></b></p>
+                        <p><%- reqData.abilities[i].description %></p>
+                    <% } %>
+                </div>
+            </div>
+            <a class="readMore" href="/info"><p>Read more</p></a>
+        </div>
+    </div>
+
+<%- include('footer.ejs') %>
